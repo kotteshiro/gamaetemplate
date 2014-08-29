@@ -4,5 +4,6 @@ var cfg={
 	assets:{ //Generales, que no son exclusivos de la escena pe: puntero, sonido evento, fondo, etc.
 		sound:[],
 		images:[]
-	}
+	}, 
+	includes:[]
 }
