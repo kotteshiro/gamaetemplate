@@ -1,45 +1,47 @@
+console.log("file:","index.js");
 require([
+		"scripts/js/own/core.js",
+		"scripts/js/own/preloader.js",
 		"scripts/js/libs/timer.min.js",
 		"scripts/js/libs/countdown.min.js",
 		"scripts/js/libs/soundjs-0.5.2.min.js",
-		"scripts/js/libs/caat/caat.js""]);
-		
+		],
+		function(){
+			cboni(_cfg.scenes.length+1,"niqa",loadedescenes);
+			require(	[
+							"scripts/js/libs/caat/caat.js",
+							"scripts/js/main.js"
+						],
+						function(){ 
+							require(["scripts/js/own/caattemplate.js"],
+									function(){
+										cbont("niqa");
+									}); 
+						}
+					);
 
-var sprtglobal=window.__sprtglbl=window.__sprtglbl||{};
-var _inited=false;
-var bg;
-var director;
-var canvas;
-function resize(){
-	if(_inited){
-	//if(window.innerHeight<768 || window.innerWidth<1024){
-			director.setScale(Math.min(window.innerWidth/1024, window.innerHeight/768),Math.min(window.innerWidth/1024, window.innerHeight/768))
-			var a=parseInt(Math.min(window.innerWidth/1024, window.innerHeight/768)*1024);
-			var h=parseInt(Math.min(window.innerWidth/1024, window.innerHeight/768)*768);
-			document.getElementById("wrap").style.width=a+"px";
-			document.getElementById("wrap").style.height=h+"px";
-			var sobrawidth	=window.innerWidth  - a;
-			var sobraheight	=window.innerHeight - h;
-			document.getElementById("_c").style["top"]=Math.round(sobraheight/2)+"px";
-			document.getElementById("_c").style["left"]=Math.round(sobrawidth/2)+"px";
-			//document.getElementById("_c").style.width=a+"px";
-			console.log("resize...",a,h);
-	//	}
-	}
-}
-function _onLoad(){
-	Loader.onBodyLoaded();
-	console.log("cargado");
-	sonido.init();
-	ini(1024,768,'_c',_images,_loaded);//caattemplate.js
-	/***/
-	window.onresize = resize;
-	window.ondeviceorientation  = resize;
-}
-function _loaded(dire){
-	_inited=true;
-	director=dire;
-	canvas=director.canvas;
-	onloadimgs(director);
-	resize();
+			//**** CARGA ESCENAS ****//
+			
+			for(var g in _cfg.scenes){
+				require(	["scenes/"+_cfg.scenes[g]+"/index.js",
+							 "scenes/"+_cfg.scenes[g]+"/assets.js"],
+							 function(){
+								cbont("niqa");
+								subtmitfiles(_images_,"scenes/"+_cfg.scenes[g]+"/");
+							 }
+						);
+			}
+			
+		}
+);
+
+function loadedescenes(){
+	console.log("AWAWAWAWAWAWAWA");
+	require(
+			["scripts/js/own/sonido2.js"],
+			function(){
+				sonido.init();
+			}
+		);
+	_onLoad();
 }
