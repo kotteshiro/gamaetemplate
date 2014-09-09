@@ -3,6 +3,7 @@ require([
 		"scripts/js/own/core.js",
 		"scripts/js/own/preloader.js",
 		"scripts/js/libs/timer.min.js",
+		"scripts/js/libs/FileSaver.js",
 		"scripts/js/libs/countdown.min.js",
 		"scripts/js/libs/soundjs-0.5.2.min.js",
 		],

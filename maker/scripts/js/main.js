@@ -36,16 +36,17 @@ function _loaded(dire){
 }
 var onloadimgs=function() {
 	loading ? loading() : null;
-	for(var i in funciones){ 
-		funciones[i].sc=director.createScene();
-		funciones[i].sc.getAll=function(){
+	var escenas=funciones; //dat name
+	for(var i in escenas){ 
+		escenas[i].sc=director.createScene();
+		escenas[i].sc.getAll=function(){
 			var arr=[];
 			for(var i in this.instancias){
 				arr.push(this.instancias[i]);
 			}
 			return arr;
 		};
-		funciones[i].cb(funciones[i].sc);
+		escenas[i].cb(escenas[i].sc);
 	}
 }
 

@@ -1,5 +1,5 @@
 var _images_= [
-
+	{id:'gato',     url:'res/images/yggdrasil.jpg'}
 ];                                   
 var _sonido_espe_ = [
 		

@@ -13,7 +13,10 @@ var _images_= [
 	{id:'earthIntro',			url: 'res/images/pres_planeta_tierra.png'}, 
 	{id: 'bgIntro',				url: 'res/images/Pres_fondo_presentacion.png'},
 	{id: 'cohete',				url: 'res/images/cohete.png'}, 
-];                                   
+];    
+
 var _sonido_espe_ = [
 		
 ];
+
+subtmitfiles(_images_,"scenes/intro/");
