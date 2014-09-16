@@ -1,7 +1,7 @@
 console.log("file:","cfg.js");
 var _cfg={
 	title: "titulito",
-	scenes:["intro","empty"], //la primera es la principal(inicial)
+	scenes:["test1","empty","test"], //la primera es la principal(inicial)
 	assets:{ //Generales, que no son exclusivos de la escena pe: puntero, sonido evento, fondo, etc.
 		sound:[
 			{id:'COMENZAR',     					url:"res/sound/COMENZAR.mp3"					},
@@ -29,6 +29,6 @@ var _cfg={
 			{id:'logogly',    						url:'res/images/GYL.png'},
 			{id:'titulo',     						url:'res/images/titulo.png'}
 		]
-	}, 
+	},
 	includes:[]
 }

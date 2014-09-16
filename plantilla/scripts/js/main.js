@@ -25,6 +25,7 @@ function _onLoad(){
 	ini(1024,768,'_c',_images,_loaded);//caattemplate.js
 	window.onresize = resize;
 	window.ondeviceorientation  = resize;
+	document.title = _cfg.title;
 }
 function _loaded(dire){
 	_inited=true;
@@ -36,7 +37,7 @@ function _loaded(dire){
 }
 var onloadimgs=function() {
 	loading ? loading() : null;
-	for(var i in funciones){ 
+	for(var i in funciones){
 		funciones[i].sc=director.createScene();
 		funciones[i].sc.getAll=function(){
 			var arr=[];
@@ -50,5 +51,5 @@ var onloadimgs=function() {
 }
 
 function showEscene(nombre){
-	
+
 }

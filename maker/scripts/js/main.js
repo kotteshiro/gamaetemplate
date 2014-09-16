@@ -4,6 +4,7 @@ var _inited=false;
 var bg;
 var director;
 var canvas;
+
 function resize(){
 	if(_inited){
 			director.setScale(Math.min(window.innerWidth/1024, window.innerHeight/768),Math.min(window.innerWidth/1024, window.innerHeight/768))
@@ -18,6 +19,7 @@ function resize(){
 			console.log("resize...",a,h);
 	}
 }
+
 function _onLoad(){
 	Loader.onBodyLoaded();
 	console.log("cargado");
@@ -37,7 +39,7 @@ function _loaded(dire){
 var onloadimgs=function() {
 	loading ? loading() : null;
 	var escenas=funciones; //dat name
-	for(var i in escenas){ 
+	for(var i in escenas){
 		escenas[i].sc=director.createScene();
 		escenas[i].sc.getAll=function(){
 			var arr=[];
@@ -51,5 +53,5 @@ var onloadimgs=function() {
 }
 
 function showEscene(nombre){
-	
+
 }

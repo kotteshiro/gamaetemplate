@@ -4,14 +4,14 @@
 	<meta charset="UTF-8">
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-	<script src="cfg.js"></script>	
+	<script src="cfg.js"></script>
 	<script data-main="scripts/js/index.js" src="scripts/js/libs/require.js"></script>
 	<script src="creador.js"></script>
 	<title>Sin titulo</title>
 	<link rel="stylesheet" type="text/css" href="scripts/css/style.css" media="screen" />
-	<style type="text/css"> 
+	<style type="text/css">
 		.caja {
-			
+
 		}
 		.grup{
 			border: 1px dashed #CEE;
@@ -75,16 +75,16 @@
 		<canvas id="_c"></canvas>
 	</div>
 	<div id="consoleoutput"></div>
-	
+
 	<div id="barralateral">
 		<div id="objeto" class="caja grup">
 			<div id="picturearea"><img src="" alt="" id="img" width="150"/><br/></div>
 			<br/>
 			<input id="iditem" type="text" value=""/>
 			<br/>
-			x: <input class="controlcor" id="xpos" type="number" value="0"/> 
+			x: <input class="controlcor" id="xpos" type="number" value="0"/>
 			y: <input class="controlcor" id="ypos" type="number" value="0"/>
-			<br/>	
+			<br/>
 		</div>
 		<div id="listado" class="caja grup">
 			<ul id="ulistado">
@@ -94,8 +94,8 @@
 			<button id="btnguardar">Guardar</button>
 		</div>
 	</div>
-	
-	
+
+
 <script>
 	/**************/
 	var bPreguntar = true;
@@ -117,16 +117,16 @@
 			}
 		}
 	}
-	
+
 	/*******************/
-	
+
 	function handleFileSelect(evt) {
 		evt.stopPropagation();
 		evt.preventDefault();
 		var meve=evt;
 	console.log("solto",evt);
 		var files = evt.dataTransfer.files; // FileList object.
-	
+
 		// files is a FileList of File objects. List some properties.
 		var output = [];
 		for (var i = 0, f; f = files[i]; i++) {
@@ -137,7 +137,8 @@
 						document.querySelector('#img').src = evt.target.result;
 						var id,existe=false;
 						do{
-							id=prompt("ID:");
+							existe=false;
+							id=prompt("ID:","object"+Math.random());
 							objOnthefly=objOnthefly||[];
 							for(var t in objOnthefly){
 								if(objOnthefly[t].name==id){
@@ -145,6 +146,10 @@
 									break;
 								}
 							}
+							if(existe)
+								alert("Ya existe elemento con el mismo id.");
+							if(!id || id=="")
+								alert("Ingrese un nombre para este elemento");
 						}while(!id || id=="" || existe);
 						//savekh(document.querySelector('#img').src,escape(id).replace(".","_"),meve.offsetX,meve.offsetY);
 						savekh(document.querySelector('#img').src,escape(id).replace(".","_"),0,0);
@@ -153,27 +158,17 @@
 					document.querySelector('#iditem').value=escape(f.name).replace(".","_");
 				reader.readAsDataURL(f);
 		}
-		
+
 		//document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
 	}
-	
-	function savekh(src,id,x,y){
-		var tmpobj=new Obj(id,src,x,y,1,1);
-		currLayout=currLayout|| new Layaut();
-		currLayout.addObj(tmpobj);
-		document.querySelector('#iditem').value="";
-		document.querySelector('#img').src="";
-		updateListado(currLayout);
-		
-		
-		sel(id);
-	}
-	
-	
+
+
+
+
 	function updateListado(){
 		$("#ulistado").empty();
 		currLayout=currLayout|| new Layaut();
-		
+
 		for(var k in currLayout.objs){
 			var ob=currLayout.objs[k];
 			$('<li id="'+ob.id+'"><button onclick="sel(\''+ob.id+'\')" >'+ob.id+'</button> </li>').appendTo("#ulistado")
@@ -185,8 +180,8 @@
 		evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
 	}
 	/*function fnsave(e){
-		if(document.querySelector('#iditem').value=="" || document.querySelector('#img').src==""){ 
-			alert("falta"); 
+		if(document.querySelector('#iditem').value=="" || document.querySelector('#img').src==""){
+			alert("falta");
 			return;
 		}
 		var id=document.querySelector('#iditem').value;
@@ -206,7 +201,7 @@
 	var dropZone = document.getElementById('wrap');
 	dropZone.addEventListener('dragover', handleDragOver, false);
 	dropZone.addEventListener('drop', handleFileSelect, false);
-	
+
 	//document.querySelector('#btnsave').addEventListener('click', fnsave, false);
 	function mousemouve(e){
 		if(cambio()){
@@ -221,7 +216,7 @@
 		if(!selected) return;
 		var curhash=selected.x+selected.name+selected.y;
 		if(window.lastaa!=curhash){
-			window.lastaa=curhash;			
+			window.lastaa=curhash;
 			return true;
 		}
 		return false;
@@ -229,7 +224,7 @@
 	$("#xpos").change(function(){
 		selected.x=$("#xpos").val();
 	});
-	
+
 	$("#ypos").change(function(){
 		selected.y=$("#ypos").val();
 	});

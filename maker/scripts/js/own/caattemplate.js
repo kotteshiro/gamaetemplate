@@ -1,6 +1,6 @@
 /**
  * @license
- * 
+ *
  * The MIT License
  * Copyright (c) 2010-2011 Ibon Tolosana, Hyperandroid || http://labs.hyperandroid.com/
 
@@ -44,7 +44,7 @@ var ini = function( width, height, runHere, imagesURL, onEndLoading )   {
         canvascontainer= document.createElement('div');
         document.body.appendChild(canvascontainer);
     }
-    
+
     /**
      * create a director.
      */
@@ -93,3 +93,14 @@ var ini = function( width, height, runHere, imagesURL, onEndLoading )   {
         }
     );
 };
+
+CAAT.Foundation.Scene.prototype.loadLayout=function(layout){
+    var escene=this;
+    for(var i in layout){
+      var hai=layout[i];
+      var tmpobj=new Obj(hai.id,hai.src,hai.x,hai.y,1,1);
+      currLayout=currLayout|| new Layaut();
+      currLayout.addObj(tmpobj);
+      
+    }
+}

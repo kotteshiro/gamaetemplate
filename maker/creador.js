@@ -1,25 +1,16 @@
-var currLayout,objOnthefly,selected,czindex=0; 
-function Obj(id, src, x, y){
-	this.id=id;
-	this.src=src;
-	this.x=x;
-	this.y=y;
-	
-	this.enableMove=function(){
-		
-	}
-}
+var currLayout,objOnthefly,selected,czindex=0;
+
 function Layaut(){
 	this.objs=[];
-	this.addObj=function(obj){
+	this.addObj=function(obj,direc){
 		this.objs.push(obj);
 		var imgid=2;
-		ponerAlVuelo(obj.src,obj.id,obj.x,obj.y);
+		ponerAlVuelo(obj.src,obj.id,obj.x,obj.y,direc);
 		//obj(uniq("b"),GM.director.currentScene,imgid,0,0,1,1);
-		
+
 		//this.synco();
 	}
-	
+
 	this.synco=function(){
 		for(var jk in this.objs){
 			var mk=this.objs[jk];
@@ -27,7 +18,7 @@ function Layaut(){
 			mk.y=mk.objeto.y;
 		}
 	}
-	
+
 	this.exporta=function(){
 		var objtoexp=[];
 		for(var jk in this.objs){
@@ -38,23 +29,23 @@ function Layaut(){
 					otmp[lp]=mk[lp]
 			}
 			objtoexp.push(otmp);
-			
+
 		}
 		return JSON.stringify(objtoexp);
 	}
-	
+
 	this.save=function(savename){
-		savename=savename||"guardado";
+		savename=savename||"layout";
 		this.synco();
 		var ex=this.exporta();
 		window.localStorage.setItem(savename,ex);
-		var blob = new Blob(["var layaout="+ex], {
+		var blob = new Blob(["window.layouts[ESCNAME]=\n"+ex+";"], {
 			type: "text/json;charset=utf-8;",
 		});
 		saveAs(blob, savename+".js")
 	}
 	this.load=function(obj){
-	
+
 		for (var ka in obj){
 			var hai=obj[ka];
 			savekh(hai.src,hai.id,hai.x,hai.y);
@@ -75,14 +66,17 @@ function cargaImg(imageURL,id,cb){
     );
 }
 
-function ponerAlVuelo(urlimg, id,x,y){
+function ponerAlVuelo(urlimg, id,x,y,escene){
+	escene=escene||director.currentScene;
 	x=x||0;
 	y=y||0;
 	id=id||uniq("noid");
 	objOnthefly=objOnthefly||[];
 	cargaImg(urlimg,id,cargado);
 	function cargado(idimg){
-		var ka=obj(idimg,GM.director.currentScene,idimg);
+		var ka=obj(idimg,escene,idimg);
+		escene.o=escene.o||{};
+		escene.o[id]=ka;
 		ka.x=x;
 		ka.y=y;
 		ka.mouseEnabled=true;
@@ -106,7 +100,7 @@ function selectProps(e){
 }
 
 function se(e){
-	
+
 }
 
 function sel(cual){
@@ -114,7 +108,7 @@ function sel(cual){
 	for(var g in objOnthefly){
 		otf=objOnthefly[g];
 		if(otf.name==cual){
-			break;	
+			break;
 		}
 	}
 	selected=otf;

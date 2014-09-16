@@ -19,7 +19,7 @@ function obj(namae,escena,imgid,x,y,sx,sy){
 	y= y ? y : 0;
 	sx= sx ? sx : 1;
 	sy= sy ? sy : 1;
-	
+
 
 	var a = new CAAT.Actor().
 		setBackgroundImage(director.getImage(imgid));
@@ -43,7 +43,7 @@ function obj(namae,escena,imgid,x,y,sx,sy){
 	if(escena.instancias[namae] != undefined) console.warn("Instancia de nombre: "+escena.instancias[namae].name+" ya existe.");
 	escena.instancias[namae]=a;
 	a.name=namae;
-	
+
 	return a;
 }
 
@@ -69,41 +69,41 @@ function btn(namae,escena,prop){
 		e.source.currsy=e.source.currsy||1;
 		if(prop.hoveranim)
 		e.source.scaleTo(e.source.currsx + 0.1 , e.source.currsy + 0.1, 80) ;
-		
+
 		b1.olffunc();
 		if(prop.mouseEnter) prop.mouseEnter(e);
 		sonido.play(sonidohover);
 	}
 	b1.olffuncme=b1.mouseExit;
-	
+
 	b1.mouseExit=function(e){
 		e.source.currsx=e.source.currsx||1;
 		e.source.currsy=e.source.currsy||1;
 		e.source.scaleTo(e.source.currsx, e.source.currsy, 50);
 		b1.olffuncme()
-		
+
 		if(prop.mouseExit) prop.mouseExit(e);
 	}
 	return b1;
-}	
+}
 
 function placeHelper(actor){
 	//actor.enableDrag();
 	window.toplace=actor;
 	addEventListener("touchmove",function(a){
-		
-		window.toplace.x=window.toplace.originx+(a.touches[0].clientX-window.toplace.touchstartx); 
-		window.toplace.y=window.toplace.originy+(a.touches[0].clientY-window.toplace.touchstarty); 
+
+		window.toplace.x=window.toplace.originx+(a.touches[0].clientX-window.toplace.touchstartx);
+		window.toplace.y=window.toplace.originy+(a.touches[0].clientY-window.toplace.touchstarty);
 		});
 	addEventListener("touchstart",function(a){
-		console.log(a); 
-		window.toplace.touchstartx=a.touches[0].clientX; 
+		console.log(a);
+		window.toplace.touchstartx=a.touches[0].clientX;
 		window.toplace.touchstarty=a.touches[0].clientY;
 		window.toplace.originx=window.toplace.x;
 		window.toplace.originy=window.toplace.y;
 		});
 	addEventListener("touchend",function(a){
-		console.log(">>",window.toplace.x,",",window.toplace.y); 
+		console.log(">>",window.toplace.x,",",window.toplace.y);
 		});
 	/*actor.mouseUp=function(a){
 		console.log(a);
@@ -135,7 +135,7 @@ function tweenTranslation(id,actor,time,tox,toy,interpolacion,cycle,delay,x,y,pi
 	y=(y!=undefined) ? y : 0;
 	//trace(">>",actor);
 	var path= new CAAT.Path().setLinear( actor.x+x,actor.y+y, tox+x, toy+y, interpolacion);
-	
+
 	//var interpolacion=new CAAT.Interpolator().createExponentialOutInterpolator(1,false);
 	var path_behavior= new CAAT.PathBehavior().
 		setPath( path ). //seting path
@@ -160,7 +160,7 @@ function tweenScale(id,actor,time,tox,toy,interpolacion,cycle,delay){
 	y=(y!=undefined) ? y : 0;*/
 	trace(">>",actor);
 	//var path= new CAAT.Path().setLinear( actor.x+x,actor.y+y, tox+x, toy+y, interpolacion);
-	
+
 	//var interpolacion=new CAAT.Interpolator().createExponentialOutInterpolator(1,false);
 	var comporta1=new CAAT.ScaleBehavior(actor.width/2,actor.height/2,1,1,0,0).
 					setFrameTime( this.time, 500 ).
@@ -177,7 +177,7 @@ function toscenaanim(ixin){
 				ixin=i;
 				break;
 			}
-			trace("toscenaanim: " + director.scenes[i].name) 
+			trace("toscenaanim: " + director.scenes[i].name)
 		}
 	}
 	var oi=new CAAT.Interpolator().createBounceOutInterpolator(0,false);
@@ -234,7 +234,7 @@ function loadlocal(){
 	if(localStorage["savepos"]){
 		var prop=JSON.parse(localStorage["savepos"]);
 		trace(prop);
-		for(var i in todo){		
+		for(var i in todo){
 			todo[i].x=prop[todo[i].name].x;
 			todo[i].y=prop[todo[i].name].y;
 		}
@@ -324,25 +324,25 @@ function FrameByFrameAnim(spriteref,fps,x,y){
 		setChangeFPS(this.fps).
 		setClip(false).
 		enableEvents(false);
-	
-	
+
+
 	//this.actor.backgroundImage.changeFPS=Number.MAX_VALUE;
-	
+
 	this.addAnimation = function(nombre,framearray,time, cb){
-		
+
 		time=time||100;
 		cb=cb||function(){};
 		this.actor.backgroundImage.addAnimation(nombre,framearray,time,function(e){ self._cbendanim(e); cb(e);  });
 		this.actor.backgroundImage.addAnimation("$stop"+nombre,[framearray[framearray.length-1]],100);
 		this.actor.backgroundImage.addAnimation("$stopini"+nombre,[framearray[0]],100);
-		
+
 		if(this.defaultanim==undefined){
 			this.defaultanim=nombre;
 		}
 		this.lastAnimationaddd=nombre;
 		console.log("addanimation","nueva animacion",nombre,framearray)
 	}
-	
+
 	this.stop=function(aname){
 		if(this.lastAnimation!=undefined){
 			this.play("$stop"+this.lastAnimation);
@@ -370,9 +370,9 @@ function FrameByFrameAnim(spriteref,fps,x,y){
 			console.error("Le estas metiendo un index fuera del rango de frames")
 		return this;
 	}
-	
+
 	this.play=function(animationName,loop){
-		
+
 		loop=loop||false;
 		this.stopatend=!loop;
 		if(animationName.indexOf("$stop")<0){
@@ -384,8 +384,8 @@ function FrameByFrameAnim(spriteref,fps,x,y){
 			this.actor.backgroundImage.playAnimation(animationName);
 		}
 	}
-	
-	
+
+
 	this._cbendanim=function(e){
 		trace("end",self.stopatend,self);
 		if(self.stopatend){
@@ -419,7 +419,7 @@ function getRandomA(nameorarr,ar2,reshuffle){
 	}else{
 		return nameorarr[randTo(nameorarr.length)];
 	}
-	
+
 }
 function randTo(nu){
 	return parseInt(Math.random(10)*nu)
@@ -433,7 +433,7 @@ function parseEaseljs(lib,escena){  // pe: parse(lib.test, primeraesecena)
 		for(var i in arguments){
 			trace("!>",i,arguments[i]);
 			var inst=arguments[i];
-			
+
 			inst._ac=new CAAT.ActorContainer();
 			inst.nominalBounds=inst.nominalBounds || {};
 			inst._ac.setBounds(inst.x,inst.y,inst.nominalBounds.width || 1,inst.nominalBounds.height || 1 ); //todo: width and height
@@ -448,7 +448,7 @@ function parseEaseljs(lib,escena){  // pe: parse(lib.test, primeraesecena)
 				instances.push(inst);
 				lastinst=inst;
 				escena.addChild(inst._ac);
-			
+
 		}
 	}
 	//var la=new lib();
@@ -483,7 +483,7 @@ function spashMsg(src,fncb,requireclick,escena,timea){
 	fncb=(fncb) ? fncb : function(){};
 	escondeescenario();
 	splashsound(src);
-	
+
 	var donde=escena||director.currentScene;
 	//obj("inst00",director,'fondo_a',0,0,.5,.5);
 	//spla=obj("splashmsg",donde,'tit_excelente',0,0,.5,.5);.
@@ -493,7 +493,7 @@ function spashMsg(src,fncb,requireclick,escena,timea){
 		.setFrameTime( donde.time, 500 )
 		.setValues( 0, 1, 0, 1 )
 		.setInterpolator(new CAAT.Interpolator().createBounceOutInterpolator(0,false));
-	
+
 	/*var g=tweenTranslation("tituloanim",tituloanim,1000,tituloanim.x,0,rebote,false,600);
 	trace("!>>>",tituloanim.y);*/
 	comporta1.addListener({
@@ -507,10 +507,10 @@ function spashMsg(src,fncb,requireclick,escena,timea){
 		.setLocation((director.width/2)-(img.width/2),(director.height/2)-(img.height/2))
 		.emptyBehaviorList()
 		.addBehavior( comporta1 );
-	
+
 	donde.addChild(spla);
 	spla.mouseEnabled=true;
-	
+
 	spla.clickcb=fncb;
 	spla.desapareceme=function(){
 		zona2.destroy();
@@ -518,7 +518,7 @@ function spashMsg(src,fncb,requireclick,escena,timea){
 		.setFrameTime( donde.time, 300 )
 		.setValues( 1, 0, 1, 0 );
 		//.setInterpolator(new CAAT.Interpolator().createBounceOutInterpolator(0,false));
-		
+
 		this.addBehavior( comporta2 );
 		comporta2.addListener({
 	        behaviorExpired : function(behavior, time, actor) {
@@ -531,56 +531,56 @@ function spashMsg(src,fncb,requireclick,escena,timea){
 	}
 	spla.mouseDown=spla.desapareceme;
 	//tweenScale("btnshow5",spla,1000,0,0,new CAAT.Interpolator().createBounceOutInterpolator(0,false),false,1500);
-	
+
 	return spla;
-	
+
 }
 var splashmsg=spashMsg;
 function randomInt(ini,to){ return Math.round(Math.random()*(to-ini))+ini }
 
 function layout(position) {
 	var coord = { x: 0, y: 0 };
-	
+
 	switch(position) {
 		case "bottom":
 		case "b":
 			coord.x = director.width / 2;
 			coord.y = director.y + director.height;
 			break;
-			
+
 		case "right":
 		case "r":
 			coord.x = director.x + director.width;
 			coord.y = director.height / 2;
 			break;
 	}
-	
+
 	return coord;
 }
 function addDragNDrop(object, onDrag, onDrop, onDragging) {
 	object.originalx = object.x;
 	object.originaly = object.y;
-	
+
 	object.mouseDown = function(e) {
 		trace("Start dragging.");
 		trace(e);
 		//this.setScale(.4, .4); poner en onDrag
-		
+
 		if(onDrag)
 			onDrag.call(this, e);
 	}
-	
+
 	object.mouseUp = function(e) {
 		trace("Drop!","Estoy en core.js 459");
-		
+
 		//PONER ESTO EN LOS CALLBACK DE LAS FUNCIONES
 		/*var droppedOn = checkDrop(e);
-		
+
 		if(droppedOn != false && droppedOn.hasElement == false) {
 			e.dropsOn = droppedOn;
 			droppedOn.hasElement = true;
-			
-			
+
+
 		} else {
 			this.volver();
 		}*/
@@ -588,20 +588,20 @@ function addDragNDrop(object, onDrag, onDrop, onDragging) {
 			onDrop.call(this, e);
 		}
 	}
-	
+
 	object.mouseDrag = function(e) {
 		this.setPosition(e.screenPoint.x-this.width/2,e.screenPoint.y-this.height/2);
-		
+
 		if(onDragging)
 			onDragging.call(this, e);
 	}
-	
+
 	object.volver = function(animado) {
 		if(animado==undefined) animado=true;
 		if(animado)
 			animaa(this, {x: this.originalx, y: this.originaly, scalex: 1, scaley: 1, alpha: 1});
 		else{
-			this.x=this.originalx; 
+			this.x=this.originalx;
 			this.y=this.originaly;
 			this.alpha=this.scalex=this.scaley=1;
 		}
@@ -626,7 +626,7 @@ function checkDrop(o,holders) {
 			return holders[i];
 		}
 	}
-	
+
 	return false;
 }
 function animaa(obj, props) {
@@ -675,7 +675,7 @@ function FlechaAtoB(where,a,b,margen){
 	this._rotation={};
 	this.x1=b.x;
 	this.y1=b.y;
-	this._rotation=getAngulo({x:a.x,y:a.y},{x:b.x,y:b.y});	
+	this._rotation=getAngulo({x:a.x,y:a.y},{x:b.x,y:b.y});
 	this.rotation=this._rotation.radianes;
 	this.x0=a.x+(Math.cos(this.rotation)*this.margen);
 	this.y0=a.y+(-Math.sin(this.rotation)*this.margen);
@@ -684,8 +684,8 @@ function FlechaAtoB(where,a,b,margen){
 	this.contenedor=new CAAT.ActorContainer().setBounds(0,0,1,1).enableEvents(false);
 	where.addChild(this.contenedor);
 	where=this.contenedor;
-	/*var anl=getAngulo({x:a.x,y:a.y},{x:b.x,y:b.y});		
-		            	
+	/*var anl=getAngulo({x:a.x,y:a.y},{x:b.x,y:b.y});
+
 		var	pro={
 			x:a.x,
 			y:a.y,
@@ -699,7 +699,7 @@ function FlechaAtoB(where,a,b,margen){
 	this.l2=this.l2||new Linea({x:this.x1+(Math.cos(-this.rotation+(Math.PI/4)+Math.PI)*20),y:this.y1+(Math.sin(-this.rotation+(Math.PI/4)+Math.PI)*20)},{x:this.x1,y:this.y1},where,this.color);
 	this.l3=this.l3||new Linea({x:this.x1+(Math.cos(-this.rotation-(Math.PI/4)+Math.PI)*20),y:this.y1+(Math.sin(-this.rotation-(Math.PI/4)+Math.PI)*20)},{x:this.x1,y:this.y1},where,this.color);
 	this.update=function(){
-			this._rotation=getAngulo({x:this.x0,y:this.y0},{x:this.x1,y:this.y1});	
+			this._rotation=getAngulo({x:this.x0,y:this.y0},{x:this.x1,y:this.y1});
 			this.rotation=this._rotation.radianes;
 			this.xi=this.x0+(Math.cos(this.rotation)*this.margen);
 			this.yi=this.y0+(-Math.sin(this.rotation)*this.margen);
@@ -707,22 +707,22 @@ function FlechaAtoB(where,a,b,margen){
 			this.yf=this.y1-(-Math.sin(this.rotation)*this.margen);
 			var dist=getDistancia({x:this.x0,y:this.y0},{x:this.xf,y:this.yf});
 			//console.log(dist,this.xi,this.yi,this.xf,this.yf);
-			
+
 			if(dist<this.margen){
 				this.xf=this.xi;
 				this.yf=this.yi;
 			}
-			
-			
+
+
 			this.l1.p1(this.xi,this.yi);
 			this.l2.p1(this.xf+(Math.cos(-this.rotation+(Math.PI/4)+Math.PI)*20),this.yf+(Math.sin(-this.rotation+(Math.PI/4)+Math.PI)*20));
 			this.l3.p1(this.xf+(Math.cos(-this.rotation-(Math.PI/4)+Math.PI)*20),this.yf+(Math.sin(-this.rotation-(Math.PI/4)+Math.PI)*20));
-			
+
 			this.l1.p2(this.xf,this.yf);
 			this.l2.p2(this.xf,this.yf);
 			this.l3.p2(this.xf,this.yf);
 	}
-	
+
 	this.p1=function(x0,y0){
 		this.x0=x0;
 		this.y0=y0;
@@ -739,10 +739,10 @@ function FlechaAtoB(where,a,b,margen){
 	//this.update();
 }
 function getAngulo(point0,point){
-	var distanceX = point0.x - point.x; 
-	var distanceY = point0.y - point.y; 
-	var angleInRadians = Math.atan2(distanceY, -distanceX); 
-	var andleInDegrees = angleInRadians * (180 / Math.PI); 
+	var distanceX = point0.x - point.x;
+	var distanceY = point0.y - point.y;
+	var angleInRadians = Math.atan2(distanceY, -distanceX);
+	var andleInDegrees = angleInRadians * (180 / Math.PI);
 	return {grados:andleInDegrees,radianes:angleInRadians};
 }
 
@@ -794,7 +794,7 @@ function Linea(from,to, where,color){
 }
 function sube(that){
 
-	if(typeof(that) != "undefined" && typeof(that.parent) != "undefined" && that.parent)	
+	if(typeof(that) != "undefined" && typeof(that.parent) != "undefined" && that.parent)
 	that.parent.setZOrder( that, Number.MAX_VALUE );
 	else
 	console.log("wut");
@@ -803,7 +803,7 @@ function clicktap(obj, fncb){
 	obj.enableEvents(true);
 	obj._clicktaps=obj._clicktaps||[];
 	obj._clicktaps.push(fncb);
-	obj.mouseDown=function(e){				
+	obj.mouseDown=function(e){
 		console.log("mousedown",e);
 		for(var k in this._clicktaps){
 			this._clicktaps[k](e);
@@ -812,7 +812,7 @@ function clicktap(obj, fncb){
 	}
 }
 function Button(elemento,clickCb){
-	
+
 }
 
 function tocasuena(que,cual){
@@ -820,7 +820,7 @@ function tocasuena(que,cual){
 }
 
 function shakeevery(what,ini,to){
-	
+
 	var rb = new CAAT.RotateBehavior().
 				setCycle(false).
 				setFrameTime(what.time+randomInt(ini,to), 500).
@@ -847,7 +847,7 @@ function jump(what,ini,to){
 			jump(what,ini,to);
 		},
 		behaviorStarted: function(behavior, time, actor){
-			
+
 		}
 	});
 }
@@ -866,7 +866,7 @@ function MenuInGame(escena) {
 							game1.obj.init();
                     }
                 });
-                
+
                 break;
             case "btn0":
 				trace("Btn0 - PAUSE");
@@ -894,7 +894,7 @@ function destroySmooty(whata){
 		setValues(1,0).
         setCycle(false).
         setFrameTime( whata.time, 600 );
-		
+
 	whata.addBehavior(rb);
 	rb.addListener({
 		behaviorExpired : function(behavior, time, actor) {
@@ -908,10 +908,10 @@ function destroySmooty(whata){
 function confirmdialog(ac, cb) {
     var h1_1 = obj("inst08", ac, 'fondo_ayuda', 0, 0, 1, 1);
     var h1_0 = obj("inst08", ac, 'dejar_juego', 222, 137, 1, 1);
-    
+
     var h1_2 = btn("BTNSI", ac, {sprite: [spsino, 0, 0],x: 394,y: 331,click: _cb}).setScale(1, 1);
     var h1_3 = btn("BTNNO", ac, {sprite: [spsino, 1, 1],x: 394 + 100,y: 331,click: _cb}).setScale(1, 1);
-    
+
     function _cb(e) {
         trace("0>>>>>", e);
         switch (e.name) {
@@ -940,21 +940,21 @@ function mutebtnaction(){
 		if(sonido.ismute()==false){
 			bgmusic.setMute(window.bgmismute); //seteamos el estado guardado de bgm
 			updatebgmbtnmute();
-		}else{		
+		}else{
 			//está muteado
 			window.bgmismute=bgmusic.getMute(); //guardamos el estado de bgm
 			if(!bgmusic.getMute()){ //muteamos el bgm
 				//mutebgmbtnaction(true);
 			}
-			
+
 		}
 		updatebgmbtnmute();*/
-		
-		
+
+
 }
 function mutebgmbtnaction(force){
 		force=force||false
-		
+
 		if(!force && sonido.ismute()) return;
 		//director.setSoundEffectsEnabled(!director.audioManager.isSoundEffectsEnabled());
 		//bgmusic.setMute(!bgmusic.getMute())
@@ -966,11 +966,11 @@ function mutebgmbtnaction(force){
 	for(var i in director.scenes){
 		if(director.scenes[i].botonmute !== undefined){
 			if(sonido.ismute())
-				director.scenes[i].botonmute.setButtonImageIndex(4, 4+7, 4, 4);	
+				director.scenes[i].botonmute.setButtonImageIndex(4, 4+7, 4, 4);
 			else
 				director.scenes[i].botonmute.setButtonImageIndex(3, 3+7, 3, 3);
 		}
-	} 
+	}
 	updatebgmbtnmute();
 }*/
 function updatebtnmutebg(){
@@ -1002,13 +1002,13 @@ function enpausa(escena) {
     clockController("pause");
     var h1_1 = obj("pa8a", escena, 'fondo_ayuda', 0, 0, 1, 1);
     var h1_0 = obj("fost08b", escena, 'en-pausa', 222, 137, 1, 1); //222,137
-	
+
 	var fn=function(a) {
 		clockController("resume");
         h1_1.destroy();
         h1_0.destroy();
     }
-	
+
    	clicktap(h1_1,fn);
 	clicktap(h1_0,fn);
 }
@@ -1028,7 +1028,7 @@ function splashsound(src){
 		break;
 		case "tit_intento3":
 			audio="pasar_de_nivel";
-			
+
 		break;
 		case "":
 			audio="";
@@ -1045,7 +1045,7 @@ function splashsound(src){
 	}
 	if(audio!=""){
 		setTimeout(function(){  sonido.play(audio); }, lag);
-		
+
 	}
 }
 function balancea(que){
@@ -1094,12 +1094,12 @@ function cboni(cant,uniqid,cb){
 function cbont(uniqid,params){
 
 	if(window["cbon_"+uniqid]==undefined){
-		console.warn("", "cbon_" + uniqid, "no se ha iniciado(cboni)"); 
+		console.warn("", "cbon_" + uniqid, "no se ha iniciado(cboni)");
 		return;
 	}
-	
+
 	window["cbon_"+uniqid].cant--;
-	
+
 	if(	window["cbon_"+uniqid].cant<=0){
 		console.log("<cbon",uniqid, window["cbon_"+uniqid].cant);
 		window["cbon_"+uniqid].cb(params);
@@ -1107,5 +1107,28 @@ function cbont(uniqid,params){
 	}else{
 		console.log(" cbon",uniqid, window["cbon_"+uniqid].cant);
 	}
-	
+
+}
+
+
+
+function savekh(src,id,x,y){
+	var tmpobj=new Obj(id,src,x,y,1,1);
+	currLayout=currLayout|| new Layaut();
+	currLayout.addObj(tmpobj);
+	document.querySelector('#iditem').value="";
+	document.querySelector('#img').src="";
+	updateListado(currLayout);
+	sel(id);
+}
+
+function Obj(id, src, x, y){
+	this.id=id;
+	this.src=src;
+	this.x=x;
+	this.y=y;
+
+	this.enableMove=function(){
+
+	}
 }
