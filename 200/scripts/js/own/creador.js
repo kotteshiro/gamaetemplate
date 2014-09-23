@@ -73,10 +73,16 @@ function ponerAlVuelo(urlimg, id,x,y,escene){
 	id=id||uniq("noid");
 	objOnthefly=objOnthefly||[];
 	cargaImg(urlimg,id,cargado);
+	window.i={};
 	function cargado(idimg){
 		var ka=obj(idimg,escene,idimg);
 		escene.o=escene.o||{};
 		escene.o[id]=ka;
+		window.i=	window.i||{};
+		if(window.i[id]){ //si ya está
+			console.warn("id Global Duplicado y reemplazado");
+		}
+		window.$i[id]=ka;
 		ka.x=x;
 		ka.y=y;
 		if(EDITOR){

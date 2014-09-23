@@ -1,6 +1,8 @@
 console.log("file:","cfg.js");
 var _cfg={
-	title: "titulito",
+	title: "200",
+	width: 900,
+	height: 600,
 	scenes:["e1"], //la primera es la principal(inicial)
 	assets:{ //Generales, que no son exclusivos de la escena pe: puntero, sonido evento, fondo, etc.
 		sound:[

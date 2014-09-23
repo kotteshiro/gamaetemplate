@@ -4,14 +4,14 @@ soundList = [];
 localStorage.bgmute=false;
 var sonido={
 	init:function(){
-		 
+
 		 createjs.Sound.registerPlugins([createjs.WebAudioPlugin, createjs.HTMLAudioPlugin, createjs.FlashPlugin]);
 		// createjs.FlashPlugin.swfPath = "../libs/src/SoundJS/";
 		 createjs.Sound.alternateExtensions = ["ogg"];
 		 createjs.Sound.addEventListener("fileload", loadHandler);
 		 _sonido_espe_=_sonido_espe_||[];
 		 var kha=_cfg.assets.sound.concat(_sonido_espe_);
-		for(var i in kha){	
+		for(var i in kha){
 			if(kha[i])
 			createjs.Sound.registerSound(kha[i].url, kha[i].id);
 			console.log("kha[i].url",kha[i].url);
@@ -21,13 +21,13 @@ var sonido={
 		}
 		var countCargados=0;
 		 function loadHandler(event) {
-			
+
 			Loader.onUpdateAudioCounter(i,countCargados);
 			//console.warn("sonido",i,countCargados,event.src);
 			if(i==countCargados){
 				Loader.onAudioLoaded();
 			}
-			
+
 			console.log("aidioloader",event);
 			 // This is fired for each sound that is registered.
 			 if(event.id=="bgmusic"){
@@ -40,20 +40,20 @@ var sonido={
 			 }
 			 countCargados++;
 		 }
-		 
+
 		 function handleComplete(){
 			bgmusic.play();
 			sonido.mutebg(sonido.ismutebg())
 		 }
-		
-		 
+
+
 	},
 	play:function(id, cb,volume){
 		volume=volume||1;
 		//soundManager.play(id);
 		if(soundList[id] === undefined) {
 			soundList[id] = createjs.Sound.createInstance(id);
-			soundList[id].addEventListener("complete", cb || function() {});
+			soundList[id].addEventListener("complete", cb || function() {}); //ojo se setea solo la primera vez.
 		}
 		console.log("Sonido",soundList[id]);
 		soundList[id].setVolume(volume)
@@ -76,11 +76,11 @@ var sonido={
 					soundList[i].stop();
 				}
 			}
-			soundList[id].play();	
+			soundList[id].play();
 		}else{
 			soundList[id].stop();
 		}
-		
+
 		if(soundList[id] == false)
 			console.error(soundList[id],"Error reproduciendo sonido",id);
 	},
@@ -96,7 +96,7 @@ var sonido={
 		if(soundList[id] == false)
 			console.error(soundList[id],"Error reproduciendo sonido",id);
 	},
-	
+
 	ismute:function(){
 		localStorage = localStorage || {};
 		var mut=localStorage.bgmute || createjs.Sound.getMute();

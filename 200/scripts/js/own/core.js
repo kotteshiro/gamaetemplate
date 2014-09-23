@@ -1146,3 +1146,8 @@ function Obj(id, src, x, y){
 
 	}
 }
+
+function ToDo(que,desc){
+	alert("TO-DO: " + que);
+	console.warn("TO-DO:" + que + " \n" + desc);
+}
