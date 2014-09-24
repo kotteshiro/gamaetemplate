@@ -4,6 +4,7 @@ var funciones=[];
 var funciones1=[];
 var allarrows = new Array();
 var comenzo1=false;
+var escondeescenario;
 var pushifnoexist=function(elem,arr){
 	var existe=false;
 	for(var k in arr){
@@ -492,6 +493,7 @@ function spashMsg(src,fncb,requireclick,escena,timea){
 	timea=timea||3000;
 	requireclick=requireclick||false;
 	fncb=(fncb) ? fncb : function(){};
+	escondeescenario=escondeescenario||function(){};
 	escondeescenario();
 	splashsound(src);
 
@@ -1150,4 +1152,18 @@ function Obj(id, src, x, y){
 function ToDo(que,desc){
 	alert("TO-DO: " + que);
 	console.warn("TO-DO:" + que + " \n" + desc);
+}
+
+function zort(objetos){
+	var lastzix=0;
+	for(var i in objetos){
+		var obi=objetos[i];
+		if(obi._obj){
+			lastzix=obi._obj.zindex;
+			obi.parent.setZOrder(obi,lastzix);
+			console.log("moviendo",i,lastzix);
+		}else{
+			obi.parent.setZOrder(obi,lastzix);
+		}
+	}
 }

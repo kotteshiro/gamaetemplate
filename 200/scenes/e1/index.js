@@ -7,8 +7,8 @@ var botonesna;
 window.layouts=window.layouts||{};
 window._escenafn=window._escenafn||{};
 window._escenafn[ESCNAME]=function(escena){
-		escena.setClip(false);
-	director.touch=true;
+	escena.setClip(false);
+	director.touch=false;
 	console.log("cargando escena function",ESCNAME);
 	escena.name=ESCNAME;
 	currLayout = currLayout || new Layaut();
@@ -27,6 +27,16 @@ window._escenafn[ESCNAME]=function(escena){
 		.setTextFillStyle("#FFFFFF")
 		.enableEvents(false);
 	escena.addChild(escena.o.operacion);
+
+	escena.o.titulo = new CAAT.TextActor()
+		.setFont("bold 27px Trebuchet MS, Helvetica, sans-serif")
+		.setTextAlign("left")
+		.setTextBaseline("top")
+		.setPosition(45,10)
+		.setText("LAS MULTIPLICACIONES")
+		.setTextFillStyle("#FFFFFF")
+		.enableEvents(false);
+	escena.addChild(escena.o.titulo);
 
 	nuevoIntento();
 
@@ -59,6 +69,7 @@ function loded(escena){
 	SETUP();
 
 	sube($i("operacion"));
+	sube($i("titulo"));
 	escondebotones();
 	setTimeout(function(){
 		playinstrucciones();
@@ -109,20 +120,23 @@ function ponertextoinside(txt,obj,parent){
 }
 
 function mouseHover(el,props){
-	if(!el || ! props) return;
+	if(!el || !props) return;
 	var h0="scaleX|scaleY|x|y|height|width|alpha".split("|");
 	var _pi={};
 
-	for(var n in props){
-		_pi[n]=el[n]; //guardamos las propiedades originales
+	if(!el._pi){
+		for(var n in props){
+			_pi[n]=el[n]; //guardamos las propiedades originales
+		}
+		el._pi=_pi;  //propiedades iniciales en el objeto
 	}
 
 	el._pf=props; //dejamos las propiedades a cambiar en el objeto
-	el._pi=_pi;  //propiedades iniciales en el objeto
+//	el._pi=_pi;  //propiedades iniciales en el objeto
 	el.mouseEnter=function(e){
 		console.log("mouse enter");
 		window.objmoen=window.objmoen||[];
-
+	//	CAAT.setCursor("pointer");
 		var el=e.source;
 		var props=el._pf;
 		pushifnoexist(el,window.objmoen); //agregamos el objeto al "grupo" de botones
@@ -136,6 +150,7 @@ function mouseHover(el,props){
 
 	el.mouseExit=function(e){
 		var el=e.source;
+	//	CAAT.setCursor("default");
 		var props=el._pi; //s
 		if(!el.selected) //si no está seleccionado aplicamos las propiedades(las default)
 			setprops(el,props);
@@ -295,6 +310,7 @@ function listo(){
 
 function somethinghappend(){
 	var k=director.currentScene.o.btnlisto
+	if(!k) return;
 	if(listo()){
 		hideshow("show",k,2)
 	}else{
@@ -304,6 +320,10 @@ function somethinghappend(){
 	console.log("valido/listo",valido(),listo());
 }
 function hideshow(ac,k,origen){
+	if(!k){
+		console.error("k no existe");
+		return;
+	}
 	if(!k.originalpos){
 		console.warn("no tinee originalpos",k);
 		k.originalpos={x:k.x,y:k.y};
@@ -356,9 +376,9 @@ function hideshow(ac,k,origen){
 			dis=(heighte-k.originalpos.y)*1.2;
 		//	dis=k.height*1.1;
 			ox=posfx;
-			oy=posfy+(dis*di);
+			oy=heighte;
 			nx=posfx;
-			ny=oy-(dis*di);
+			ny=posfy;
 		break;
 	}
 
@@ -389,7 +409,7 @@ function SETUP(){
 	}
 	for(var t in objstos){
 		var k=objstos[t];
-		var pos={x:k.x , y:k.y}
+		var pos={x:k._obj.x , y:k._obj.y};
 		k.originalpos=pos;
 		hideshow("hide",k,2)
 	}
@@ -510,8 +530,10 @@ function nuevoIntento(){
 			window.$re=function(){if(krn.length<1) llenardistract(a,b); return krn.pop() };
 	}
 	do{
-		escena.v.opa=$ra();
-		escena.v.opb=$ra();
+		do{
+			escena.v.opa=$ra();
+			escena.v.opb=$ra();
+		}while(((escena.v.opa*escena.v.opb)*10) > 999);
 		llenardistract(escena.v.opa,escena.v.opb);
 		var unico=false;
 		var sum=0;

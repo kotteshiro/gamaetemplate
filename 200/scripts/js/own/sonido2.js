@@ -13,7 +13,7 @@ var sonido={
 		 var kha=_cfg.assets.sound.concat(_sonido_espe_);
 		for(var i in kha){
 			if(kha[i])
-			createjs.Sound.registerSound(kha[i].url, kha[i].id);
+				createjs.Sound.registerSound(kha[i].url, kha[i].id);
 			console.log("kha[i].url",kha[i].url);
 			if(kha[i].id == "bgmusic"){
 				bgmusicvolumen=1;//kha[i].volume||1;
