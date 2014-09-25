@@ -1138,11 +1138,12 @@ function savekh(src,id,x,y){
 	sel(id);
 }
 
-function Obj(id, src, x, y){
+function Obj(id, src, x, y, zindex){
 	this.id=id;
 	this.src=src;
 	this.x=x;
 	this.y=y;
+	this.zindex=zindex;
 
 	this.enableMove=function(){
 
@@ -1156,14 +1157,17 @@ function ToDo(que,desc){
 
 function zort(objetos){
 	var lastzix=0;
+	var io=20;
 	for(var i in objetos){
 		var obi=objetos[i];
-		if(obi._obj){
-			lastzix=obi._obj.zindex;
+		if(indexz[obi.name]){
+			lastzix=indexz[obi.name];
 			obi.parent.setZOrder(obi,lastzix);
-			console.log("moviendo",i,lastzix);
+			console.log("moviendo",i,lastzix,obi._obj);
 		}else{
 			obi.parent.setZOrder(obi,lastzix);
+			console.log("moviendo",i,lastzix,obi);
 		}
+		io--
 	}
 }
