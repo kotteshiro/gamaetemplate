@@ -490,7 +490,7 @@ function getsprt(spritename,ancho,alto){
 	return sprtglobal[spritename];
 }
 function spashMsg(src,fncb,requireclick,escena,timea){
-	timea=timea||3000;
+	timea=timea||1200;
 	requireclick=requireclick||false;
 	fncb=(fncb) ? fncb : function(){};
 	escondeescenario=escondeescenario||function(){};
@@ -1139,11 +1139,11 @@ function savekh(src,id,x,y){
 }
 
 function Obj(id, src, x, y, zindex){
-	this.id=id;
-	this.src=src;
-	this.x=x;
-	this.y=y;
-	this.zindex=zindex;
+	this.id=id||"";
+	this.src=src||"";
+	this.x=x||"";
+	this.y=y||"";
+	this.zindex=zindex||"";
 
 	this.enableMove=function(){
 
@@ -1170,4 +1170,11 @@ function zort(objetos){
 		}
 		io--
 	}
+}
+function block(op){
+  //TODO: algun efecto de vbloqueo
+	window.playlocked=window.playlocked||false;
+	if (op!=undefined) window.playlocked=op
+
+	return window.playlocked;
 }

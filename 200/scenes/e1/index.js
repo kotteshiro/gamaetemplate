@@ -7,7 +7,7 @@ var botonesna;
 window.layouts=window.layouts||{};
 window._escenafn=window._escenafn||{};
 window._escenafn[ESCNAME]=function(escena){
-	escena.setClip(false);
+	escena.setClip(true);
 	director.touch=false;
 	console.log("cargando escena function",ESCNAME);
 	escena.name=ESCNAME;
@@ -26,21 +26,32 @@ window._escenafn[ESCNAME]=function(escena){
 		.setText("")
 		.setTextFillStyle("#FFFFFF")
 		.enableEvents(false);
+
 	escena.addChild(escena.o.operacion);
 
 	escena.o.titulo = new CAAT.TextActor()
-		.setFont("bold 27px Trebuchet MS, Helvetica, sans-serif")
+		.setFont(_cfg.titlestyle)
 		.setTextAlign("left")
 		.setTextBaseline("top")
 		.setPosition(45,10)
-		.setText("LAS MULTIPLICACIONES")
+		.setText(_cfg.title)
 		.setTextFillStyle("#FFFFFF")
 		.enableEvents(false);
+
+
+
+	setzindexprop("titulo",20,escena);
+	setzindexprop("operacion",20,escena);
+
 	escena.addChild(escena.o.titulo);
 
 	nuevoIntento();
 
-	setTimeout(function(){sonido.play("comenzar"); loded(escena)}, 500); //cambiar!! debería entrar aqui cuando se termina de cargar el layout
+	setTimeout(function(){
+										sonido.play("comenzar");
+										loded(escena);
+										zort(escena.o)
+							}, 500); //cambiar!! debería entrar aqui cuando se termina de cargar el layout
 
 	console.log("escena:",escena);
 
@@ -54,8 +65,6 @@ sc(window._escenafn[ESCNAME]);
 /*******************************/
 
 function loded(escena){
-
-
 
 	if(director.touch != true){
 		mouseHover(	escena.o.btnlisto,{scaleX:1.1,scaleY:1.1}); //aplicamos comportamiento de mouseHover
@@ -95,10 +104,16 @@ function ponertextoinside(txt,obj,parent){
 	kaa.height = tmp.height;
 	tmp.y = 0;
 	tmp.x = 0;
+
+	var brillito = new CAAT.Actor().setBackgroundImage(director.getImage("globobillo"));
+	brillito.width = tmp.width;
+	brillito.height = tmp.height;
+
+	brillito.setScaleAnchored(.8,.8,.5,.5);
+	tmp.setScaleAnchored(.8,.8,.5,.5);
 	tmp.enableEvents(false);
 	kaa.enableEvents(false);
-
-
+	brillito.enableEvents(false);
 	/**/
 	var res = new CAAT.TextActor()
 		.setFont("bold 24px Trebuchet MS, Helvetica, sans-serif")
@@ -112,6 +127,7 @@ function ponertextoinside(txt,obj,parent){
 	esc.removeChild(tmp)
 	kaa.addChild(tmp);
 	kaa.addChild(res);
+	kaa.addChild(brillito);
 	kaa.texto=res;
 	kaa.val=txt;
 	esc.addChild(kaa);
@@ -135,6 +151,7 @@ function mouseHover(el,props){
 //	el._pi=_pi;  //propiedades iniciales en el objeto
 	el.mouseEnter=function(e){
 		console.log("mouse enter");
+		if(block()) return;
 		window.objmoen=window.objmoen||[];
 	//	CAAT.setCursor("pointer");
 		var el=e.source;
@@ -205,6 +222,7 @@ function seleccionable(obj,grupo,selecty){
 	obj.grupo =	window.gruposselec[grupo];
 	pushifnoexist(obj,window.gruposselec[grupo])
 	obj.mouseClick=function(e){
+	if(block()) return;
 		var obj = e.source;
 		var grupo=obj.grupo;
 		switch(obj.selectType){
@@ -383,16 +401,17 @@ function hideshow(ac,k,origen){
 	}
 
 	if(ac=="show"){
+		k.visible=true;
 		k.x=ox;
 		k.y=oy;
 		var di=dist(ox,oy,nx,ny);
-		k.moveTo( nx, ny, 1000, 10 ,new CAAT.Interpolator().createBounceOutInterpolator(0,false));
+		k.moveTo( nx, ny, 1000, 10 ,new CAAT.Interpolator().createBounceOutInterpolator(0,false),function(){});
 		sube(k);
 	}else{
 		k.x=nx;
 		k.y=ny;
 		var di=dist(nx,ny,ox,oy);
-		k.moveTo( ox, oy, 1000, 10,new CAAT.Interpolator().createBounceOutInterpolator(0,false));
+		k.moveTo( ox, oy, 1000, 10,new CAAT.Interpolator().createBounceOutInterpolator(0,false),function(){ k.visible=false });
 
 	}
 }
@@ -405,7 +424,8 @@ function SETUP(){
 	var objstos=[];
 	for(var ka in tosaveprop){
 		var obj=o[tosaveprop[ka]];
-		objstos.push(obj);
+		if(obj)
+			objstos.push(obj);
 	}
 	for(var t in objstos){
 		var k=objstos[t];
@@ -437,7 +457,13 @@ function listoco(){ //cuando se pulsa el boton listo
 function muestrarespuesta(){
 	var obj=director.currentScene.o.globo; //cualquiera, lo necesito para el grupo
 	var grupo=obj.grupo;
+
+	block(true);
 	sonido.play("respuesta");
+	escondebotones();
+	spashMsg("respcorrecta");
+
+
 	for(var t  in grupo){
 		if(grupo[t].val==window.resultado){
 			grupo[t].select();
@@ -445,10 +471,24 @@ function muestrarespuesta(){
 			grupo[t].deSelect();
 		}
 	}
-	ToDo("bloquear, cambio de botones");
+	hideshow("show",$i("btncomenzar"),BOTTOM); //show or wherevert
+	//ToDo("bloquear, cambio de botones");
+}
+
+
+function reset(){
+	block(false);
+	var obj=director.currentScene.o.globo; //cualquiera, lo necesito para el grupo
+	var grupo=obj.grupo;
+	for(var t  in grupo){
+		grupo[t].deSelect();
+	}
+	somethinghappend();
 }
 
 function denuevo(){
+	block(false);
+	spashMsg("intentalodenuevo");
 	var obj=director.currentScene.o.globo; //cualquiera, lo necesito para el grupo
 	var grupo=obj.grupo;
 	for(var t  in grupo){
@@ -458,9 +498,10 @@ function denuevo(){
 }
 
 function muybien(){
+	block(true);
 	sonido.play("bien");
 	escondebotones();
-	hideshow("show",$i("btnmuybien"),BOTTOM); //show or wherevert
+	spashMsg("muybien");
 	hideshow("show",$i("btncomenzar"),BOTTOM); //show or wherevert
 }
 
@@ -489,6 +530,7 @@ function escondebotones(){
 	for(var i in botonesna){
 		var bot=botonesna[i];
 		hideshow("hide",bot,BOTTOM); //show or wherevert
+		//bot.visible=false;
 	}
 }
 
@@ -533,7 +575,7 @@ function nuevoIntento(){
 		do{
 			escena.v.opa=$ra();
 			escena.v.opb=$ra();
-		}while(((escena.v.opa*escena.v.opb)*10) > 999);
+		}while(((escena.v.opa*escena.v.opb)*10) > 999 || ((escena.v.opa*escena.v.opb)*escena.v.opb+1) > 999);
 		llenardistract(escena.v.opa,escena.v.opb);
 		var unico=false;
 		var sum=0;
@@ -561,6 +603,7 @@ function nuevoIntento(){
 			var blix=0;
 			for (var ind in escena.o){
 				escena.o[ind].name=escena.o[ind].name||"";
+			console.log("Z",escena.o[ind].name,escena.o[ind]);
 				if(escena.o[ind].name.indexOf("globo")>-1){
 					if(!escena.o[ind].texto){
 						escena.o[ind]=ponertextoinside(escena.v.valoresGlobos[blix].toLocaleString(),escena.o[ind],escena);
@@ -575,15 +618,18 @@ function nuevoIntento(){
 					convertirBoton(escena.o[ind],function(){});
 				}
 			}
-	}, 50); //cambiar!! debería entrar aqui cuando se termina de cargar el layout
+	}, 500); //cambiar!! debería entrar aqui cuando se termina de cargar el layout
 
 }
 function fncomenzar(){
+	block(false)
+	reset();
 	nuevoIntento();
 	sonido.play("comenzar");
 }
 
 function clickeable(obj,fn){
+	if(!obj) return console.error("no hay obj");
 	obj.enableEvents(true);
 	obj.mouseClick = fn;
 }

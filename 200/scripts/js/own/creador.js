@@ -1,11 +1,13 @@
-var currLayout,objOnthefly,selected,czindex=0;
+var currLayout,objOnthefly,selected,czindex=0, indexz={};
 
 function Layaut(){
 	this.objs=[];
 	this.addObj=function(obj,direc){
 		this.objs.push(obj);
 		var imgid=2;
-		ponerAlVuelo(obj.src,obj.id,obj.x,obj.y,direc);
+		indexz[obj.id]=obj.zindex;
+	//	if(obj.visible!=false)
+		ponerAlVuelo(obj,direc);
 		//obj(uniq("b"),GM.director.currentScene,imgid,0,0,1,1);
 
 		//this.synco();
@@ -59,20 +61,31 @@ function cargaImg(imageURL,id,cb){
 	new CAAT.ImagePreloader().loadImages(
         [{url:imageURL,id:id}],
         function( counter, images ) {
-            director.setImagesCache(images);
+					var ar=[].concat(images);
+					for(var i in ar){
+						pushifnoexist(ar[i],_allimgs_);
+					}
+          director.setImagesCache(_allimgs_);
 			console.log("imagen cargada");
 			cb(id);
         }
     );
 }
 
-function ponerAlVuelo(urlimg, id,x,y,escene){
+function ponerAlVuelo(obja,escene){
 	escene=escene||director.currentScene;
-	x=x||0;
-	y=y||0;
-	id=id||uniq("noid");
+	escene=escene||director.currentScene;
+	var x=obja.x||0;
+	var y=obja.y||0;
+	var id=obja.id||uniq("noid");
+	var urlimg=obja.src||"";
 	objOnthefly=objOnthefly||[];
-	cargaImg(urlimg,id,cargado);
+
+	if(obja.autoinstance!=false){
+		cargaImg(urlimg,id,cargado);
+	}else{
+		cargaImg(urlimg,id,function(){});
+	}
 	window.i={};
 	function cargado(idimg){
 		var ka=obj(idimg,escene,idimg);
@@ -174,4 +187,14 @@ function Esceneloadermanager(){
 			this.callbackover[t]();
 		}
 	}
+}
+
+function setzindexprop(objname,zix,escena){
+	indexz=indexz||{};
+	if(escena.o[objname]){
+		escena.o[objname].name=objname;
+	}else{
+		console.warn("posible problema con zindex");
+	}
+	indexz[objname]=zix;
 }

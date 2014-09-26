@@ -23,6 +23,7 @@
  * THE SOFTWARE.
  *
  */
+var _allimgs_=[];
 var ini = function( width, height, runHere, imagesURL, onEndLoading )   {
 
     /**
@@ -68,9 +69,13 @@ var ini = function( width, height, runHere, imagesURL, onEndLoading )   {
 			trace("img>",counter," of ",images.length);
 			Loader.onUpdateImgsCounter(counter, images.length);
             if ( counter==images.length ) {
-				Loader.onImgLoaded();
+				        Loader.onImgLoaded();
                 director.emptyScenes();
-                director.setImagesCache(images);
+                var ar=[].concat(images);
+                for(var i in ar){
+                  pushifnoexist(ar[i],_allimgs_);
+                }
+                director.setImagesCache(_allimgs_);
 
                 onEndLoading(director);
 
@@ -98,9 +103,12 @@ CAAT.Foundation.Scene.prototype.loadLayout=function(layout){
     var escene=this;
     for(var i in layout){
       var hai=layout[i];
-      var tmpobj=new Obj(hai.id,hai.src,hai.x,hai.y,1,1);
+      var tmpobj=new Obj();
+      for(var g in hai){
+  		  tmpobj[g]=hai[g];
+  	  }
       currLayout=currLayout|| new Layaut();
-       currLayout.addObj(tmpobj,escene);
+      currLayout.addObj(tmpobj,escene);
 
     }
 }

@@ -58,8 +58,13 @@ var sonido={
 		console.log("Sonido",soundList[id]);
 		soundList[id].setVolume(volume)
 		soundList[id].play();
+		var rs=soundList[id].playState;
 		if(soundList[id] == false)
 			console.error(soundList[id],"Error reproduciendo sonido",id);
+		if(rs!="playSucceeded"){
+			setTimeout(function(){ sonido.play(id,cb,volume);  } , 100);
+		}
+		return rs;
 	},
 	playStop:function(id, cb,volume){
 		volume=volume||1;
