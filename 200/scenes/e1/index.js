@@ -130,6 +130,8 @@ function ponertextoinside(txt,obj,parent){
 	kaa.addChild(brillito);
 	kaa.texto=res;
 	kaa.val=txt;
+	brillito.alpha=0;
+	kaa.brillito=brillito;
 	esc.addChild(kaa);
 	obj=kaa;
 	return obj;
@@ -193,6 +195,9 @@ function setprops(el,props){
 						el.scaleTo(props[h0[0]]||1,props[h0[1]]||1,200)
 				//	}
 				break;
+			case 6: //alpha
+					el.setAlpha(props[h0[6]]);
+			break;
 			}
 		}
 	}
@@ -252,12 +257,18 @@ function seleccionable(obj,grupo,selecty){
 	obj.deSelect=function(){
 		this.selected=false;
 		setprops(this,{scaleX:1,scaleY:1})
+		if(this.brillito){
+			setprops(this.brillito,{alpha:"0"})
+		}
 	}
 
 	obj.select=function(){
 		this.selected=true;
 		sube(this);
 		setprops(this,{scaleX:1.4,scaleY:1.4})
+		if(this.brillito){
+			setprops(this.brillito,{alpha:1})
+		}
 		sonido.play("seleccion");
 	}
 }
